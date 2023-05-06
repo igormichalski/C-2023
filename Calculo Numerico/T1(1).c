@@ -1,19 +1,42 @@
 #include <stdio.h>
 
-void mostrar(int operacao, int ordem, float matriz[][ordem])
+void mostrar(int operacao, int ordem, double matriz[][ordem])
 {
     if (operacao==999)
-    printf("INVERSA\n");
+        printf("\nINVERSA\n");
     else {
-        printf("Operação [%d]:\n", operacao);
+        printf("\nOperacao [%d]:\n", operacao);
     }
-        for (int i = 0; i < ordem; i++) {
-            for (int j = 0; j < ordem; j++) {
-                printf("%.2f ", matriz[i][j]);
-            }
-            printf("\n");
+    for (int i = 0; i < ordem; i++) {
+        for (int j = 0; j < ordem; j++) {
+            printf("%.2lf ", matriz[i][j]);
         }
+        printf("\n");
+    }
 
+}
+
+void mostrar_aumentada(int operacao, int ordem, double matriz[][ordem*2]) {
+    if (operacao == 999)
+        printf("\nINVERSA\n");
+    else {
+        printf("\nOperacao [%d]:\n", operacao);
+    }
+    for (int i = 0; i < ordem; i++) {
+        int contador = 0;
+        for (int j = 0; j < ordem * 2+1; j++) {
+            if (contador==ordem)
+            {
+                printf(" | ");
+                contador=0;
+            }
+            else {
+                printf("%.2lf ", matriz[i][j]);
+                contador++;
+            }
+            }
+        printf("\n");
+    }
 }
 
 
@@ -26,7 +49,7 @@ int main() {
     scanf("%d", &ordem);
 
     //INICIADA DEPOIS PARA TERMOS VALORES DE LINHA E COLUNA POSTO PELO USUARIO
-    float matriz[ordem][ordem], inversa[ordem][ordem], aumentada[ordem][ordem*2];;
+    double matriz[ordem][ordem], inversa[ordem][ordem], aumentada[ordem][ordem*2];;
 
     //VALIDANDO TAMANHA DA MATRIZ
     if (ordem>0 && ordem<=10)
@@ -38,12 +61,11 @@ int main() {
         {
             for (int j = 0; j < ordem; j++) {
                 printf("Valor para A[%d][%d]: ", i+1, j+1);
-                scanf("%f", &matriz[i][j]);
+                scanf("%lf", &matriz[i][j]);
             }
         }
 
-        //MOSTRA O VALOR DA MATRIZ
-       // mostrar(0, ordem, matriz);
+        mostrar(0, ordem, matriz);
 
         //REALIZA PERMUTAÇÃO NA MATRIZ
         float aux;
@@ -79,17 +101,18 @@ int main() {
         float pivo;
         for (int i=0; i<ordem; i++) {
             pivo = aumentada[i][i];
-            if (pivo!=0) {
-                for (int j=0; j<ordem*2; j++) {
+            if (pivo != 0) {
+                for (int j = 0; j < ordem * 2; j++) {
                     aumentada[i][j] /= pivo;
                 }
-                for (int j=0; j<ordem; j++) {
-                    if (j!=i) {
+                for (int j = 0; j < ordem; j++) {
+                    if (j != i) {
                         aux = aumentada[j][i];
-                        for (int k=0; k<ordem*2; k++) {
+                        for (int k = 0; k < ordem * 2; k++) {
                             aumentada[j][k] -= aumentada[i][k] * aux;
                         }
-
+                        mostrar_aumentada(operacao, ordem, aumentada);
+                        operacao++;
                     }
                 }
             }
