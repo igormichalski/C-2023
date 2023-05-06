@@ -9,7 +9,7 @@ void mostrar(int operacao, int ordem, double matriz[][ordem])
     }
     for (int i = 0; i < ordem; i++) {
         for (int j = 0; j < ordem; j++) {
-            printf("%.2lf ", matriz[i][j]);
+            printf("%.2Lf ", matriz[i][j]);
         }
         printf("\n");
     }
@@ -31,7 +31,7 @@ void mostrar_aumentada(int operacao, int ordem, double matriz[][ordem*2]) {
                 contador=0;
             }
             else {
-                printf("%.2lf ", matriz[i][j]);
+                printf("%.2Lf ", matriz[i][j]);
                 contador++;
             }
             }
@@ -49,7 +49,7 @@ int main() {
     scanf("%d", &ordem);
 
     //INICIADA DEPOIS PARA TERMOS VALORES DE LINHA E COLUNA POSTO PELO USUARIO
-    double matriz[ordem][ordem], inversa[ordem][ordem], aumentada[ordem][ordem*2];;
+    long double matriz[ordem][ordem], inversa[ordem][ordem], aumentada[ordem][ordem*2];;
 
     //VALIDANDO TAMANHA DA MATRIZ
     if (ordem>0 && ordem<=10)
@@ -61,30 +61,12 @@ int main() {
         {
             for (int j = 0; j < ordem; j++) {
                 printf("Valor para A[%d][%d]: ", i+1, j+1);
-                scanf("%lf", &matriz[i][j]);
+                scanf("%Lf", &matriz[i][j]);
             }
         }
 
         mostrar(0, ordem, matriz);
 
-        //REALIZA PERMUTAÇÃO NA MATRIZ
-        float aux;
-        for (int i=0; i<ordem; i++) {
-            if (matriz[i][i] == 0) {
-                for (int j = i+1; j<ordem; j++) {
-                    if (matriz[j][i] != 0) {
-                        for (int k=0; k<ordem; k++) {
-                            aux = matriz[i][k];
-                            matriz[i][k] = matriz[j][k];
-                            matriz[j][k] = aux;
-                        }
-                        mostrar(operacao, ordem, matriz);
-                        operacao++;
-                        break;
-                    }
-                }
-            }
-        }
 
         //INICIANDO MATRIZ AUMENTADA
         for (int i = 0; i < ordem; i++) {
@@ -97,7 +79,25 @@ int main() {
             aumentada[i][i+ordem] = 1;
         }
 
-        //
+        //REALIZA PERMUTAÇÃO NA MATRIZ
+        float aux;
+        for (int i=0; i<ordem; i++) {
+            if (aumentada[i][i] == 0) {
+                for (int j = i+1; j<ordem; j++) {
+                    if (aumentada[j][i] != 0) {
+                        for (int k=0; k<ordem*2; k++) {
+                            aux = aumentada[i][k];
+                            aumentada[i][k] = aumentada[j][k];
+                            aumentada[j][k] = aux;
+                        }
+                        mostrar(operacao, ordem, aumentada);
+                        operacao++;
+                        break;
+                    }
+                }
+            }
+        }
+
         float pivo;
         for (int i=0; i<ordem; i++) {
             pivo = aumentada[i][i];
