@@ -22,7 +22,7 @@ void mostrar_aumentada(int operacao, int ordem, double matriz[][ordem * 2])
         printf("\nOperacao [%d]:\n", operacao);
     for (int i = 0; i < ordem; i++) {
         for (int j = 0; j < ordem * 2; j++) {
-                printf("%.2lf ", matriz[i][j]);
+            printf("%.2lf ", matriz[i][j]);
         }
         printf("\n");
     }
@@ -69,9 +69,9 @@ int main() {
                 for (i = k + 1; i < ordem; i++) {
                     if (aumentada[i][k] != 0) {
                         for (int j = 0; j < ordem * 2; j++) {
-                            double temp = aumentada[k][j];
+                            double aux = aumentada[k][j];
                             aumentada[k][j] = aumentada[i][j];
-                            aumentada[i][j] = temp;
+                            aumentada[i][j] = aux;
                         }
                         break;
                     }
