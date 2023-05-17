@@ -2,17 +2,15 @@
 #include <math.h>
 #include <time.h>
 
-#define MAX_SIZE 10
-
-int convergencia(int ordem, double A[ordem][ordem]) {
+int convergencia(int ordem, double matriz[ordem][ordem]) {
     double soma_linha, diagonal_principal;
 
     for (int i = 0; i < ordem; i++) {
         soma_linha = 0.0;
-        diagonal_principal = fabs(A[i][i]);
+        diagonal_principal = fabs(matriz[i][i]);
         for (int j = 0; j < ordem; j++) {
             if (i != j) {
-                soma_linha += fabs(A[i][j]);
+                soma_linha += fabs(matriz[i][j]);
             }
         }
         if (diagonal_principal <= soma_linha) {
@@ -20,58 +18,6 @@ int convergencia(int ordem, double A[ordem][ordem]) {
         }
     }
     return 1;
-}
-
-void jacobi(int ordem, double A[ordem][ordem], double b[ordem], double x[ordem], double precisao) {
-    double x_new[ordem];
-    double error;
-    int iterations = 0;
-    clock_t start_time, end_time;
-    double execution_time;
-
-    start_time = clock();
-
-    do {
-        error = 0.0;
-
-        for (int i = 0; i < ordem; i++) {
-            x_new[i] = b[i];
-
-            for (int j = 0; j < ordem; j++) {
-                if (j != i) {
-                    x_new[i] -= A[i][j] * x[j];
-                }
-            }
-
-            x_new[i] /= A[i][i];
-            error += fabs(x_new[i] - x[i]);
-            x[i] = x_new[i];
-        }
-
-        iterations++;
-
-        printf("Passo %d:\n", iterations);
-        printf("Sistema:\n");
-        for (int i = 0; i < ordem; i++) {
-            for (int j = 0; j < ordem; j++) {
-                printf("%.7lf ", A[i][j]);
-            }
-            printf("| %.7lf\n", b[i]);
-        }
-
-        printf("Erro: %.7lf\n", error);
-
-    } while (error > precisao);
-
-    end_time = clock();
-    execution_time = ((double) (end_time - start_time)) / CLOCKS_PER_SEC;
-
-    printf("\nSolução:\n");
-    for (int i = 0; i < ordem; i++) {
-        printf("x[%d] = %.7lf\n", i, x[i]);
-    }
-
-    printf("Tempo de execução: %.7lf segundos\n", execution_time);
 }
 
 int main() {
@@ -88,9 +34,11 @@ int main() {
 
         //declaradod depois para termos o tamanho correto da matriz
         double precisao;
-        double matriz[ordem][ordem];
-        double t_idependentes[ordem];
-        double s_inicial[ordem];
+        double matriz[ordem][ordem], t_idependentes[ordem], s_inicial[ordem];
+        double nova_icognita[ordem];
+        double erro;
+        int contador=0, validar=0;
+        clock_t inicio, fim;
 
         //O que vvem antes do = (matriz)
         printf("Informe os coeficientes da matriz A:\n");
@@ -100,7 +48,9 @@ int main() {
             }
         }
 
-        if (!convergencia(ordem, matriz)) {
+        validar = convergencia(ordem, matriz);
+
+        if (validar==0) {
             printf("Altere as linhas, pois o sistema nao converge.\n");
         } else {
 
@@ -118,7 +68,51 @@ int main() {
                 scanf("%lf", &s_inicial[i]);
             }
 
-            jacobi(ordem, matriz, t_idependentes, s_inicial, precisao);
+
+            //Para marcar o tempo
+            inicio = clock();
+
+            do{
+                erro = 0.0;
+
+                for (int i = 0; i < ordem; i++) {
+                    nova_icognita[i] = t_idependentes[i];
+
+                    for (int j = 0; j < ordem; j++) {
+                        if (j != i) {
+                            nova_icognita[i] -= matriz[i][j] * s_inicial[j];
+                        }
+                    }
+
+                    nova_icognita[i] = nova_icognita[i] / matriz[i][i];
+                    erro += fabs(nova_icognita[i] - s_inicial[i]);
+                    s_inicial[i] = nova_icognita[i];
+                }
+
+                //Mostrando informações de cada passo
+                contador++;
+                printf("Operacao %d:\n\n", contador);
+                for (int i = 0; i < ordem; i++) {
+                    for (int j = 0; j < ordem; j++) {
+                        printf("%.7lf ", matriz[i][j]);
+                    }
+                    printf("| %.7lf\n", t_idependentes[i]);
+                }
+                printf("\nErro: %.7lf\n", erro);
+
+            }while(erro > precisao);
+
+
+            //finalizando timer e vendo valor de execusão
+            fim = clock();
+            double tempo_gasto = ((double) (fim - inicio)) / CLOCKS_PER_SEC;
+
+            printf("\nSolução:\n");
+            for (int i = 0; i < ordem; i++) {
+                printf("x[%d] = %.7lf\n", i, s_inicial[i]);
+            }
+
+            printf("Tempo de execução: %.7lf segundos\n", tempo_gasto);
         }
     }
     return 0;
