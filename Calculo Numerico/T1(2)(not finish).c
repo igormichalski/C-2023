@@ -20,11 +20,23 @@ int convergencia(int ordem, double matriz[ordem][ordem]) {
     return 1;
 }
 
+void mostrar(int contador, int ordem, double matriz[][ordem], double t_idependentes[], double erro)
+{
+    printf("Operacao %d:\n\n", contador);
+    for (int i = 0; i < ordem; i++) {
+        for (int j = 0; j < ordem; j++) {
+            printf("%.7lf ", matriz[i][j]);
+        }
+        printf("= %.7lf\n", t_idependentes[i]);
+    }
+    printf("\nErro: %.7lf\n", erro);
+}
+
 int main() {
     int ordem;
 
     //recebe a ordem
-    printf("Informe a ordem da matriz (máximo 10): ");
+    printf("Informe a ordem da matriz: ");
     scanf("%d", &ordem);
 
     //vverifica a vvalidade da ordem
@@ -52,10 +64,10 @@ int main() {
 
         if (validar==0) {
             printf("Altere as linhas, pois o sistema nao converge.\n");
-        } else {
+        } else { //ENTRADA
 
             //O que vem depois do sinal de =
-            printf("Informe os termos independentes (vetor b):\n");
+            printf("Informe os termos independentes:\n");
             for (int i = 0; i < ordem; i++) {
                 scanf("%lf", &t_idependentes[i]);
             }
@@ -89,16 +101,9 @@ int main() {
                     s_inicial[i] = nova_icognita[i];
                 }
 
-                //Mostrando informações de cada passo
+                //Mostrando informações de cada passo (implementar função)
                 contador++;
-                printf("Operacao %d:\n\n", contador);
-                for (int i = 0; i < ordem; i++) {
-                    for (int j = 0; j < ordem; j++) {
-                        printf("%.7lf ", matriz[i][j]);
-                    }
-                    printf("| %.7lf\n", t_idependentes[i]);
-                }
-                printf("\nErro: %.7lf\n", erro);
+                mostrar(contador,ordem, matriz, t_idependentes, erro);
 
             }while(erro > precisao);
 
@@ -107,12 +112,13 @@ int main() {
             fim = clock();
             double tempo_gasto = ((double) (fim - inicio)) / CLOCKS_PER_SEC;
 
-            printf("\nSolução:\n");
+
+            printf("\nSolucao:\n");
             for (int i = 0; i < ordem; i++) {
                 printf("x[%d] = %.7lf\n", i, s_inicial[i]);
             }
 
-            printf("Tempo de execução: %.7lf segundos\n", tempo_gasto);
+            printf("Tempo gasto: %.7lf segundos\n", tempo_gasto);
         }
     }
     return 0;
