@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <math.h>
+
+//gcc -o main main.c -lm (Utilizamos função pow)
+
+int main () {
+    float S=0;
+    int num, i=0, aux=1, j=1;
+
+    scanf("%d", &num);
+
+    while(i!=num){
+        if (aux==1){
+            S = S + 1.0/(j*j*j);
+            j = j+2;
+            aux = 0;
+        }else{
+            S = S - 1.0/(j*j*j);
+            j = j+2;
+            aux = 1;
+        }
+        i++;
+    }
+
+    S = pow(S*32, 1.0/3.0);
+
+    printf("%f\n", S);
+
+    return 0;
+}
+
