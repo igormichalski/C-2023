@@ -1,124 +1,144 @@
 #include <stdio.h>
 
 int main() {
-    int elevador, perido;
-    int EA = 0, EB = 0, EC = 0;
-    int EAM = 0, EBM = 0, ECM = 0;
-    int EAV = 0, EBV = 0, ECV = 0;
-    int EAN = 0, EBN = 0, ECN = 0;
-    for(int i=0; i<3; i++){
-        printf("informe o elevador que mais utiliza: (1)EA (2)EB (3)EC\n");
-        scanf("%d", &elevador);
+
+    int freqEA = 0, freqEB = 0, freqEC = 0;
+
+    int AperiodoM = 0, BperiodoM = 0, CperiodoM = 0;
+    int AperiodoV = 0, BperiodoV = 0, CperiodoV  = 0;
+    int AperiodoN = 0, BperiodoN = 0, CperiodoN = 0;
+    int somaM = 0, somaV = 0, somaN = 0;
+
+    char elevador;
+    char periodo;
+
+    for (int i=0;i<50;i++) {
+        //ENTRADAS
+        printf("Qual o elevador que utiliza com mais frequencia? (A, B ou C)\n");
+        fflush(stdin);
+        scanf("%c", &elevador);
+
+        printf("Qual o perIodo que mais utiliza o elevador? (M = Matutino, V = Vespertino, N = Noturno)\n");
+        fflush(stdin);
+        scanf("%c", &periodo);
 
         switch (elevador) {
-            case (1):
-                EA++;
-                printf("Qual horario? (1)M (2)V (3)N\n");
-                scanf("%d", &perido);
-                switch (perido) {
-                    case(1):
-                        EAM++;
+
+            case 'A':
+                freqEA++;
+                switch (periodo) {
+                    case 'M':
+                        AperiodoM++;
                         break;
-                    case(2):
-                        EAV++;
+                    case 'V':
+                        AperiodoV++;
                         break;
-                    case(3):
-                        EAN++;
-                        break;
-                    default:
-                        printf("Entrada de dado invalida\n");
-                        i=50;
+                    case 'N':
+                        AperiodoN++;
                         break;
                 }
                 break;
 
-            case (2):
-                EB++;
-                printf("Qual horario? (1)M (2)V (3)N\n");
-                scanf("%d", &perido);
-                switch (perido) {
-                    case(1):
-                        EBM++;
+
+            case 'B':
+                freqEB++;
+                switch (periodo) {
+                    case 'M':
+                        BperiodoM++;
                         break;
-                    case(2):
-                        EBV++;
+                    case 'V':
+                        BperiodoV++;
                         break;
-                    case(3):
-                        EBN++;
-                        break;
-                    default:
-                        printf("Entrada de dado invalida\n");
-                        i=50;
+                    case 'N':
+                        BperiodoN++;
                         break;
                 }
                 break;
 
-            case (3):
-                EC++;
-                printf("Qual horario? (1)M (2)V (3)N\n");
-                scanf("%d", &perido);
-                switch (perido) {
-                    case(1):
-                        ECM++;
+
+            case 'C':
+                freqEC++;
+                switch (periodo) {
+                    case 'M':
+                        CperiodoM++;
                         break;
-                    case(2):
-                        ECV++;
+                    case 'V':
+                        CperiodoV++;
                         break;
-                    case(3):
-                        ECN++;
-                        break;
-                    default:
-                        printf("Entrada de dado invalida\n");
-                        i=50;
+                    case 'N':
+                        CperiodoN++;
                         break;
                 }
                 break;
+        }
+    }
 
-            default:
-                printf("Entrada de dado invalida\n");
-                i=50;
-                break;
+
+    // Verificação do elevador mais frequentado
+    char elevadorMaisFrequentado;
+
+    if (freqEA >= freqEB && freqEA >= freqEC) {
+        elevadorMaisFrequentado = 'A';
+    } else if (freqEB >= freqEA && freqEB >= freqEC) {
+        elevadorMaisFrequentado = 'B';
+    } else {
+        elevadorMaisFrequentado = 'C';
+    }
+
+
+    // Verificação do período mais frequente para o elevador mais utilizado
+    char periodoMaisFrequente;
+
+    if (elevadorMaisFrequentado == 'A') {
+        if (AperiodoM >= AperiodoV && AperiodoM >= AperiodoN) {
+            periodoMaisFrequente = 'M';
+        } else if (AperiodoV >= AperiodoM && AperiodoV >= AperiodoN) {
+            periodoMaisFrequente = 'V';
+        } else {
+            periodoMaisFrequente = 'N';
+        }
+    } else if (elevadorMaisFrequentado == 'B') {
+        if (BperiodoM >= BperiodoV && BperiodoM >= BperiodoN) {
+            periodoMaisFrequente = 'M';
+        } else if (BperiodoV >= BperiodoM && BperiodoV >= BperiodoN) {
+            periodoMaisFrequente = 'V';
+        } else {
+            periodoMaisFrequente = 'N';
+        }
+    } else {
+        if (CperiodoM >= CperiodoV && CperiodoM >= CperiodoN) {
+            periodoMaisFrequente = 'M';
+        } else if (CperiodoV >= CperiodoM && CperiodoV >= CperiodoN) {
+            periodoMaisFrequente = 'V';
+        } else {
+            periodoMaisFrequente = 'N';
         }
     }
-    //EA MAIOR
-    if(EA>EB && EA>EC){
-        printf("O mais utilizado e o elevador EA no periodo ");
-        if(EAM>EAV && EAM>EAN){
-            printf("Matutino\n");
-        }
-       if(EAV>EAM && EAV>EAN){
-           printf("Vatutino\n");
-       }
-       if(EAN>EAM && EAN>EAV){
-           printf("Noturno\n");
-       }
+
+
+    //Soma de todos os periodos
+    somaM = AperiodoM + BperiodoM + CperiodoM;
+    somaV = AperiodoV + BperiodoV + CperiodoV;
+    somaN = AperiodoN + BperiodoN + CperiodoN;
+
+    char periodoMaisFrequenteTotal;
+
+    if (somaM >= somaV && somaM >= somaN) {
+        periodoMaisFrequenteTotal = 'M';
+    } else if (somaV >= somaM && somaV >= somaN) {
+        periodoMaisFrequenteTotal = 'V';
+    } else {
+        periodoMaisFrequenteTotal = 'N';
     }
-    //EB MAIOR
-    if(EB>EA && EB>EC){
-        printf("O mais utilizado e o elevador EB no periodo ");
-        if(EBM>EBV && EBM>EBN){
-            printf("Matutino\n");
-        }
-        if(EBV>EAM && EBV>EBN){
-            printf("Vatutino\n");
-        }
-        if(EBN>EBM && EBN>EBV){
-            printf("Noturno\n");
-        }
-    }
-    //EC MAIOR
-    if(EC>EA && EC>EB){
-        printf("O mais utilizado e o elevador EC no periodo ");
-        if(ECM>ECV && ECM>ECN){
-            printf("Matutino\n");
-        }
-        if(ECV>ECM && ECV>ECN){
-            printf("Vatutino\n");
-        }
-        if(ECN>ECM && ECN>ECV){
-            printf("Noturno\n");
-        }
-    }
+
+
+    //SAIDAS
+    printf("Resposta 1:\n");
+    printf("O elevador mais frequentado é: %c\n", elevadorMaisFrequentado);
+    printf("O período mais frequente para o elevador mais utilizado é: %c\n", periodoMaisFrequente);
+
+    printf("Resposta 2:\n");
+    printf("O período com maior fluxo é: %c\n", periodoMaisFrequenteTotal);
 
     return 0;
 }
